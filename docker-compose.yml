@@ -1,0 +1,11 @@
+services:
+  middleware-mqtt-corsight:
+    build: .
+    container_name: middleware_service
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app/logs
