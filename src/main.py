@@ -28,6 +28,7 @@ mqtt_service = MqttService(use_case=detection_use_case)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    logger.info("🚀 Starting MQTT to Corsight Adapter v1.1 (Token Fix)")
     if settings.ENABLE_MQTT:
         logger.info("Starting MQTT Service...")
         mqtt_service.start()
