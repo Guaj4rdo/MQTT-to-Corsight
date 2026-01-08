@@ -37,4 +37,4 @@ docker run -d \
 
 echo "Deployment complete!"
 echo "Logs:"
-docker logs -f $CONTAINER_NAME
+docker logs $CONTAINER_NAME
