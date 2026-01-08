@@ -19,7 +19,15 @@ class CorsightAdapter(FaceRepository):
                     "password": settings.CORSIGHT_PASS
                 })
                 if resp.status_code == 200:
-                    return resp.json()["data"]["access_token"]
+                    resp_data = resp.json()
+                    # Try to find token in data.token or root access_token
+                    token = resp_data.get("data", {}).get("token") or resp_data.get("access_token")
+                    
+                    if token:
+                        return token
+                    else:
+                        logger.error(f"Token not found in response: {resp_data}")
+                        return None
                 else:
                     logger.error(f"Error login Corsight: {resp.status_code} - {resp.text}")
                     return None
