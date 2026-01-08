@@ -19,14 +19,14 @@ echo "Building Docker image..."
 docker build -t $IMAGE_NAME .
 
 # 3. Run Container
-echo "▶️  Running container..."
+echo "Running container..."
 docker run -d \
     --name $CONTAINER_NAME \
     --restart unless-stopped \
+    --network="host" \
     --env-file .env \
-    -p $PORT:8000 \
     $IMAGE_NAME
 
-echo "✅ Deployment complete!"
+echo "Deployment complete!"
 echo "Logs:"
 docker logs -f $CONTAINER_NAME
