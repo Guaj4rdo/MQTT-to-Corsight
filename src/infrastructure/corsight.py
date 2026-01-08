@@ -41,7 +41,7 @@ class CorsightAdapter(FaceRepository):
             logger.error("Failed to get Corsight token. Aborting.")
             return False
 
-        url = f"{settings.CORSIGHT_URL}/poi_service/poi_db/pois/"
+        url = f"{settings.CORSIGHT_URL}/poi_service/poi_db/poi/"
         payload = {
             "pois": [{
                 "display_name": detection.display_name,
