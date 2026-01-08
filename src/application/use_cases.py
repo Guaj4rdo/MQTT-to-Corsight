@@ -17,3 +17,5 @@ class ProcessDetectionUseCase:
             logger.info("✅ Success processing detection")
         else:
             logger.error("❌ Error processing detection")
+            
+        return success
