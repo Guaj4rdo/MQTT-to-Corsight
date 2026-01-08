@@ -3,6 +3,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
 
     ENVIRONMENT: str = "PRODUCTION"
+    ENABLE_MQTT: bool = True
     
     MQTT_BROKER: str
     MQTT_PORT: int = 1883

@@ -7,6 +7,13 @@ PORT=8000
 
 echo "Deploying $IMAGE_NAME..."
 
+# Check for simulation mode
+ENABLE_MQTT=True
+if [[ "$1" == "--sim" ]]; then
+    echo "🧪 SIMULATION MODE (MQTT Disabled)"
+    ENABLE_MQTT=False
+fi
+
 # 1. Stop and remove existing container
 if [ "$(docker ps -aq -f name=$CONTAINER_NAME)" ]; then
     echo "Stopping and removing existing container..."
@@ -25,6 +32,7 @@ docker run -d \
     --restart unless-stopped \
     --network="host" \
     --env-file .env \
+    -e ENABLE_MQTT=$ENABLE_MQTT \
     $IMAGE_NAME
 
 echo "Deployment complete!"

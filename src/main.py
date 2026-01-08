@@ -20,18 +20,42 @@ else:
     logger.info("RUNNING IN PRODUCTION MODE")
     repository = CorsightAdapter()
 
+from src.domain.schemas import MqttEvent, FaceDetection
+
 # Dependency injection
 detection_use_case = ProcessDetectionUseCase(repository=repository)
 mqtt_service = MqttService(use_case=detection_use_case)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    mqtt_service.start()
+    if settings.ENABLE_MQTT:
+        logger.info("Starting MQTT Service...")
+        mqtt_service.start()
+    else:
+        logger.warning("MQTT Service is DISABLED")
     yield
-    mqtt_service.stop()
+    if settings.ENABLE_MQTT:
+        mqtt_service.stop()
 
 app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 def health():
-    return {"status": "ok", "env": os.getenv("ENVIRONMENT")}
+    return {"status": "ok", "env": os.getenv("ENVIRONMENT"), "mqtt_enabled": settings.ENABLE_MQTT}
+
+@app.post("/simulate")
+def simulate_detection(event: MqttEvent):
+    """
+    Endpoint to manually trigger a detection without MQTT.
+    """
+    logger.info(f"Received manual simulation event: {event.EventID}")
+    
+    detection = FaceDetection(
+        display_name=event.payload.name,
+        rut=event.payload.rut,
+        image_base64=event.payload.image_b64,
+        is_blacklist=event.payload.blacklist
+    )
+    
+    result = detection_use_case.execute(detection)
+    return {"status": "processed", "success": result}
