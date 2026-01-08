@@ -14,7 +14,7 @@ class CorsightAdapter(FaceRepository):
         url = f"{settings.CORSIGHT_URL}/users_service/auth/login/"
         try:
             with httpx.Client(verify=False) as client:
-                resp = client.post(url, json={
+                resp = client.post(url, data={
                     "username": settings.CORSIGHT_USER, 
                     "password": settings.CORSIGHT_PASS
                 })
