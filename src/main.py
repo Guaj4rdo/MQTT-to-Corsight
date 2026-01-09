@@ -28,7 +28,11 @@ mqtt_service = MqttService(use_case=detection_use_case)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("🚀 Starting MQTT to Corsight Adapter v1.1 (Token Fix)")
+    """
+    Lifecycle manager for the FastAPI application.
+    Handles startup and shutdown events for the MQTT service.
+    """
+    logger.info("Starting MQTT to Corsight Adapter v1.1 (Token Fix)")
     if settings.ENABLE_MQTT:
         logger.info("Starting MQTT Service...")
         mqtt_service.start()
@@ -42,12 +46,24 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 def health():
+    """
+    Health check endpoint.
+    Returns:
+        dict: Status, current environment, and MQTT service state.
+    """
     return {"status": "ok", "env": os.getenv("ENVIRONMENT"), "mqtt_enabled": settings.ENABLE_MQTT}
 
 @app.post("/simulate")
 def simulate_detection(event: MqttEvent):
     """
-    Endpoint to manually trigger a detection without MQTT.
+    Endpoint to manually trigger a detection event without an active MQTT broker.
+    Useful for testing and verification purposes.
+
+    Args:
+        event (MqttEvent): The simulation payload containing detection details.
+
+    Returns:
+        dict: Processing status and success flag.
     """
     logger.info(f"Received manual simulation event: {event.EventID}")
     

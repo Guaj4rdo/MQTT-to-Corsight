@@ -10,7 +10,11 @@ logger = logging.getLogger("CorsightAdapter")
 class CorsightAdapter(FaceRepository):
     def _get_token(self):
         """
-        Método privado para obtener el token de autenticación.
+        Retrieves the authentication token from the Corsight API (Fortify).
+        
+        Returns:
+            str: The session token or access_token if successful.
+            None: If authentication fails.
         """
         url = f"{settings.CORSIGHT_URL}/users_service/auth/login/"
         try:
@@ -37,6 +41,15 @@ class CorsightAdapter(FaceRepository):
             return None
 
     def create_poi(self, detection: FaceDetection) -> bool:
+        """
+        Creates a Person of Interest (POI) in the Corsight database.
+
+        Args:
+            detection (FaceDetection): The detection object containing person details.
+
+        Returns:
+            bool: True if the creation was successful, False otherwise.
+        """
         token = self._get_token()
         if not token:
             logger.error("Failed to get Corsight token. Aborting.")
@@ -52,7 +65,7 @@ class CorsightAdapter(FaceRepository):
                         "is_blacklist": str(detection.is_blacklist).lower(),
                         "origin": "mqtt_integration"
                     },
-                    "free_notes": f"Importado desde MQTT. RUT: {detection.rut}"
+                    "free_notes": f"Imported from MQTT. RUT: {detection.rut}"
                 },
                 "face": {
                     "image_payload": {
@@ -73,10 +86,10 @@ class CorsightAdapter(FaceRepository):
             with httpx.Client(verify=False) as client:
                 resp = client.post(url, json=payload, headers=headers)
                 if resp.status_code == 200:
-                    logger.info(f"✅ Success sending to Corsight. Response: {resp.json()}")
+                    logger.info(f"Success sending to Corsight. Response: {resp.json()}")
                     return True
                 
-                logger.error(f"❌ Error Corsight {resp.status_code}: {resp.text}")
+                logger.error(f"Error Corsight {resp.status_code}: {resp.text}")
                 return False
         except Exception as e:
             logger.error(f"Exception calling Create POI: {e}")

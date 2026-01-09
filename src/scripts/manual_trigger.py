@@ -13,6 +13,11 @@ import argparse
 import base64
 
 def main():
+    """
+    Main function to execute the manual trigger script.
+    Parses CLI arguments, constructs a simulated MQTT payload, and either sends it to the API
+    or processes it internally.
+    """
     # 1. Parse Arguments to allow overriding environment and image
     parser = argparse.ArgumentParser(description="Manual Trigger for Corsight Integration")
     parser.add_argument("--prod", action="store_true", help="Force usage of real CorsightAdapter regardless of .env settings")
@@ -69,16 +74,15 @@ def main():
             # We need to send the MqttEvent structure
             response = requests.post(args.url, json=sample_payload)
             if response.status_code == 200:
-                logger.info(f"✅ Simulation Request Sent. Response: {response.json()}")
+                logger.info(f"Simulation Request Sent. Response: {response.json()}")
             else:
-                logger.error(f"❌ Failed to send request. Status: {response.status_code}, Body: {response.text}")
+                logger.error(f"Failed to send request. Status: {response.status_code}, Body: {response.text}")
         except Exception as e:
             logger.error(f"Exception sending request: {e}")
         return
 
     logger.info("Initializing Manual Trigger (Internal Mode)...")
 
-    # Internal imports (Delayed to allow script to run as client without dependencies)
     # Internal imports (Delayed to allow script to run as client without dependencies)
     sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 

@@ -10,7 +10,7 @@ echo "Deploying $IMAGE_NAME..."
 # Check for simulation mode
 ENABLE_MQTT=True
 if [[ "$1" == "--sim" ]]; then
-    echo "🧪 SIMULATION MODE (MQTT Disabled)"
+    echo "SIMULATION MODE (MQTT Disabled)"
     ENABLE_MQTT=False
 fi
 
