@@ -1,5 +1,6 @@
 import httpx
 import logging
+import json
 from src.application.ports import FaceRepository
 from src.domain.schemas import FaceDetection
 from src.infrastructure.config import settings
@@ -45,14 +46,12 @@ class CorsightAdapter(FaceRepository):
         payload = {
             "pois": [{
                 "display_name": detection.display_name,
-                "poi_notes": {
-                    "properties": {
-                        "rut": detection.rut,
-                        "is_blacklist": detection.is_blacklist,
-                        "origin": "mqtt_integration"
-                    },
+                "poi_notes": json.dumps({
+                    "rut": detection.rut,
+                    "is_blacklist": detection.is_blacklist,
+                    "origin": "mqtt_integration",
                     "free_notes": f"Importado desde MQTT. RUT: {detection.rut}"
-                },
+                }),
                 "face": {
                     "image_payload": {
                         "img": detection.image_base64,
