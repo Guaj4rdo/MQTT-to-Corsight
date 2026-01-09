@@ -40,6 +40,7 @@ def main():
             with open(image_path, "rb") as image_file:
                 image_b64 = base64.b64encode(image_file.read()).decode('utf-8')
             logger.info(f"Loaded image from {image_path}")
+            logger.info(f"Image B64 Header: {image_b64[:50]}...")
         except Exception as e:
             logger.error(f"Failed to load image: {e}")
             return
