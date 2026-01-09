@@ -66,6 +66,34 @@ def main():
             else:
                 logger.error(f"❌ Failed to send request. Status: {response.status_code}, Body: {response.text}")
         except Exception as e:
+            logger.error(f"Exception sending request: {e}")
+        return
+
+    logger.info("Initializing Manual Trigger (Internal Mode)...")
+
+    # Internal imports (Delayed to allow script to run as client without dependencies)
+    import os
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+    try:
+        from src.infrastructure.config import settings
+        from src.infrastructure.corsight import CorsightAdapter
+        from src.infrastructure.mock_repository import MockFaceRepository
+        from src.application.use_cases import ProcessDetectionUseCase
+        from src.domain.schemas import MqttEvent, FaceDetection
+    except ImportError as e:
+        logger.error(f"Missing dependencies for Internal Mode: {e}")
+        logger.error("To use Internal Mode, install requirements.txt. To use Client Mode, provide --url.")
+        return
+
+    # 3. Select Repository
+    # Check if PROD is forced via CLI or set in .env
+    if args.prod or settings.ENVIRONMENT != "LOCAL":
+        logger.info("Using Real CorsightAdapter (PROD mode)")
+        try:
+            repository = CorsightAdapter()
+        except Exception as e:
+            logger.error(f"Failed to initialize CorsightAdapter: {e}")
             return
     else:
         logger.warning("Running in LOCAL mode (Mock Repository). Use --prod to force real CorsightAdapter.")
