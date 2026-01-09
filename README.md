@@ -14,12 +14,12 @@ Create a `.env` file in the project root with the following variables:
 
 ```env
 # Corsight Configuration
-CORSIGHT_API_URL=https://172.21.196.136
-CORSIGHT_USER=admin
-CORSIGHT_PASS=admin
+CORSIGHT_API_URL=https://corsight-api.example.com
+CORSIGHT_USER=your_username
+CORSIGHT_PASS=your_password
 
 # MQTT Configuration (Ignored in simulation mode)
-MQTT_BROKER=127.0.0.1
+MQTT_BROKER=localhost
 MQTT_PORT=1883
 MQTT_TOPIC=face/detection
 ```
@@ -62,14 +62,14 @@ This script executes a full test by sending a request to the container running i
 You can override any data of the detected person:
 
 ```bash
-./run_test.sh --name "John Doe" --rut "11.222.333-4" --blacklist false --image /path/to/my_photo.jpg
+./run_test.sh --name "Any Person" --rut "00.000.000-0" --blacklist false --image /path/to/my_photo.jpg
 ```
 
 | Argument | Description | Default Value |
 |----------|-------------|---------------|
 | `--image` | Path to image (jpg/png) | `tests/fixtures/face.jpg` |
 | `--name` | Person name | "Test Person" |
-| `--rut` | Person RUT (ID) | "12.345.678-0" |
+| `--rut` | Person RUT (ID) | "00.000.000-0" |
 | `--blacklist`| Is blacklisted (`true`/`false`) | `true` |
 | `--url` | Simulation endpoint URL | `http://localhost:8000/simulate` |
 

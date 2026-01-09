@@ -24,7 +24,7 @@ def main():
     parser.add_argument("--image", type=str, help="Path to an image file to use in the payload")
     parser.add_argument("--url", type=str, help="URL of the simulate endpoint (e.g., http://localhost:8000/simulate)")
     parser.add_argument("--name", type=str, default="Test Person", help="Name of the person detected")
-    parser.add_argument("--rut", type=str, default="12.345.678-0", help="RUT of the person")
+    parser.add_argument("--rut", type=str, default="00.000.000-0", help="RUT of the person")
     parser.add_argument("--blacklist", type=str, default="true", help="Is blacklisted? (true/false)")
     args = parser.parse_args()
 

@@ -14,12 +14,12 @@ Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
 
 ```env
 # Corsight Configuration
-CORSIGHT_API_URL=https://172.21.196.136
-CORSIGHT_USER=admin
-CORSIGHT_PASS=admin
+CORSIGHT_API_URL=https://api-corsight.ejemplo.com
+CORSIGHT_USER=tu_usuario
+CORSIGHT_PASS=tu_contraseña
 
 # MQTT Configuration (Ignorado en modo simulación)
-MQTT_BROKER=127.0.0.1
+MQTT_BROKER=localhost
 MQTT_PORT=1883
 MQTT_TOPIC=face/detection
 ```
@@ -62,14 +62,14 @@ Este script ejecuta una prueba completa enviando una petición al contenedor cor
 Puedes anular cualquier dato de la persona detectada:
 
 ```bash
-./run_test.sh --name "Juan Perez" --rut "11.222.333-4" --blacklist false --image /ruta/foto.jpg
+./run_test.sh --name "Cualquier Persona" --rut "00.000.000-0" --blacklist false --image /ruta/foto.jpg
 ```
 
 | Argumento | Descripción | Valor por defecto |
 |-----------|-------------|-------------------|
 | `--image` | Ruta a la imagen (jpg/png) | `tests/fixtures/face.jpg` |
 | `--name` | Nombre de la persona | "Test Person" |
-| `--rut` | RUT de la persona | "12.345.678-0" |
+| `--rut` | RUT de la persona | "00.000.000-0" |
 | `--blacklist`| Es lista negra (`true`/`false`) | `true` |
 | `--url` | URL del endpoint de simulación | `http://localhost:8000/simulate` |
 
