@@ -46,12 +46,14 @@ class CorsightAdapter(FaceRepository):
         payload = {
             "pois": [{
                 "display_name": detection.display_name,
-                "poi_notes": json.dumps({
-                    "rut": detection.rut,
-                    "is_blacklist": detection.is_blacklist,
-                    "origin": "mqtt_integration",
+                "poi_notes": {
+                    "properties": {
+                        "rut": detection.rut,
+                        "is_blacklist": str(detection.is_blacklist).lower(),
+                        "origin": "mqtt_integration"
+                    },
                     "free_notes": f"Importado desde MQTT. RUT: {detection.rut}"
-                }),
+                },
                 "face": {
                     "image_payload": {
                         "img": detection.image_base64,
