@@ -6,8 +6,8 @@ echo "🚀 Running Simulation Test..."
 URL="http://localhost:8000/simulate"
 
 # Run the python script
-if [ -f "src/manual_trigger.py" ]; then
-    python3 src/manual_trigger.py --url "$URL" "$@"
+if [ -f "src/scripts/manual_trigger.py" ]; then
+    python3 src/scripts/manual_trigger.py --url "$URL" "$@"
     
     if [ $? -eq 0 ]; then
         echo "✅ Test script executed successfully."

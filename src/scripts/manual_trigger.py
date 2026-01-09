@@ -18,6 +18,9 @@ def main():
     parser.add_argument("--prod", action="store_true", help="Force usage of real CorsightAdapter regardless of .env settings")
     parser.add_argument("--image", type=str, help="Path to an image file to use in the payload")
     parser.add_argument("--url", type=str, help="URL of the simulate endpoint (e.g., http://localhost:8000/simulate)")
+    parser.add_argument("--name", type=str, default="Test Person", help="Name of the person detected")
+    parser.add_argument("--rut", type=str, default="12.345.678-0", help="RUT of the person")
+    parser.add_argument("--blacklist", type=str, default="true", help="Is blacklisted? (true/false)")
     args = parser.parse_args()
 
     # Logic to load image from file
@@ -39,6 +42,9 @@ def main():
         logger.error(f"Image not found at {image_path}. Please provide a valid image with --image or ensure {DEFAULT_IMAGE_PATH} exists.")
         return
 
+    # Parse blacklist boolean
+    is_blacklisted = args.blacklist.lower() == "true"
+
     # 2. Sample JSON payload (simulating MQTT message)
     sample_payload = {
         "EventID": "sim-manual-1",
@@ -48,9 +54,9 @@ def main():
         },
         "sampleDate": int(datetime.now().timestamp() * 1000),
         "payload": {
-            "name": "Pedro Pascal",
-            "rut": "12.345.678-9",
-            "blacklist": True,
+            "name": args.name,
+            "rut": args.rut,
+            "blacklist": is_blacklisted,
             "image_b64": image_b64 
         }
     }
@@ -74,7 +80,7 @@ def main():
 
     # Internal imports (Delayed to allow script to run as client without dependencies)
     # Internal imports (Delayed to allow script to run as client without dependencies)
-    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
     try:
         from src.infrastructure.config import settings
