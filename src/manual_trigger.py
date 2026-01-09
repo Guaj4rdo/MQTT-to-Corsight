@@ -73,7 +73,7 @@ def main():
     logger.info("Initializing Manual Trigger (Internal Mode)...")
 
     # Internal imports (Delayed to allow script to run as client without dependencies)
-    import os
+    # Internal imports (Delayed to allow script to run as client without dependencies)
     sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
     try:
