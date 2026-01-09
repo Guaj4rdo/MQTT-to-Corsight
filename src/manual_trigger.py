@@ -4,17 +4,6 @@ import logging
 import sys
 from datetime import datetime
 
-# Adjust path to ensure we can import from src
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from src.infrastructure.config import settings
-from src.infrastructure.corsight import CorsightAdapter
-from src.infrastructure.mock_repository import MockFaceRepository
-from src.application.use_cases import ProcessDetectionUseCase
-from src.domain.schemas import MqttEvent, FaceDetection
-from src.infrastructure.mqtt import MqttService
-
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("ManualTrigger")
@@ -77,21 +66,6 @@ def main():
             else:
                 logger.error(f"❌ Failed to send request. Status: {response.status_code}, Body: {response.text}")
         except Exception as e:
-            logger.error(f"Exception sending request: {e}")
-        return
-
-    logger.info("Initializing Manual Trigger (Internal Mode)...")
-
-    # [Rest of the file remains similar but in the 'else' block or after return]
-    # To minimize diff, I will keep the original logic flow below but wrapped/guarded.
-    
-    # 3. Select Repository (Local/Prod)
-    if args.prod or settings.ENVIRONMENT != "LOCAL":
-        logger.info("Using Real CorsightAdapter (PROD mode)")
-        try:
-            repository = CorsightAdapter()
-        except Exception as e:
-            logger.error(f"Failed to initialize CorsightAdapter: {e}")
             return
     else:
         logger.warning("Running in LOCAL mode (Mock Repository). Use --prod to force real CorsightAdapter.")
