@@ -22,6 +22,11 @@ logger = logging.getLogger("ManualTrigger")
 import argparse
 import base64
 
+def main():
+    # 1. Parse Arguments to allow overriding environment and image
+    parser = argparse.ArgumentParser(description="Manual Trigger for Corsight Integration")
+    parser.add_argument("--prod", action="store_true", help="Force usage of real CorsightAdapter regardless of .env settings")
+    parser.add_argument("--image", type=str, help="Path to an image file to use in the payload")
     parser.add_argument("--url", type=str, help="URL of the simulate endpoint (e.g., http://localhost:8000/simulate)")
     args = parser.parse_args()
 
